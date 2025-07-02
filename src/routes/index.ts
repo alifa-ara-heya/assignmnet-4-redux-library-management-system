@@ -11,6 +11,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 Component: Books
+            },
+            {
+                path: 'books',
+                Component: Books
             }
         ]
     }

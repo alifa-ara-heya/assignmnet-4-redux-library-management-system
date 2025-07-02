@@ -1,5 +1,13 @@
+import { Outlet } from "react-router";
+import Navbar from "../src/components/Navbar";
+
 function App() {
-  return <h1>Library Managemenet System</h1>;
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
 }
 
 export default App;
