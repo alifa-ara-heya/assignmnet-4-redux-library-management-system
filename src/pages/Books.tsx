@@ -20,13 +20,21 @@ const Books = () => {
 
   const limit = 10;
 
-  const { data, error, isLoading } = useGetBooksQuery({
-    page,
-    limit,
-    sort,
-    sortBy: "createdAt",
-    filter: genre,
-  });
+  const { data, error, isLoading } = useGetBooksQuery(
+    {
+      page,
+      limit,
+      sort,
+      sortBy: "createdAt",
+      filter: genre,
+    },
+    {
+      pollingInterval: 30000, // fetch every 30s
+      refetchOnFocus: true, //  when browser regains focus
+      refetchOnMountOrArgChange: true, //when args change (like page or genre)
+      refetchOnReconnect: true, // when internet reconnects
+    }
+  );
   //   console.log(data);
   const books = data?.data || [];
   const totalPages = data?.meta?.totalPages || 1;

@@ -20,7 +20,8 @@ const router = createBrowserRouter([
             {
                 path: 'create-book',
                 Component: AddBook
-            }
+            },
+
         ]
     }
 ])
