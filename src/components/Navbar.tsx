@@ -1,13 +1,15 @@
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { ModeToggle } from "./mode-toggle";
 
 const Navbar = () => {
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow">
+    <nav className="sticky top-0 z-50 shadow backdrop-blur-2xl">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-          📚 Library
-        </h1>
+        <Link to="/">
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            📚 Library
+          </h1>
+        </Link>
         <div className="flex items-center gap-4">
           <NavLink
             to="/books"
