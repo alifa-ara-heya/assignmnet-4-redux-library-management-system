@@ -7,10 +7,17 @@ export const baseApi = createApi({
     }),
     tagTypes: ['book'],
     endpoints: (builder) => ({
+        // get books
         getBooks: builder.query({
-            query: ({ page = 1, limit = 10 }) => `/books?page=${page}&limit=${limit}`,
+            query: ({
+                page = 1,
+                limit = 10,
+                sort = "desc",
+                sortBy = "createdAt",
+                filter = "" }) => `/books?page=${page}&limit=${limit}&sort=${sort}&sortBy=${sortBy}&filter=${filter}`,
         }),
 
+        // create a book
         createBook: builder.mutation({
             query: (bookData) => ({
                 url: "/books",

@@ -5,12 +5,28 @@ import BannerImg from "@/assets/banner.jpg";
 import { Link } from "react-router";
 import { useState } from "react";
 import { MoveLeft, MoveRight } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Books = () => {
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState("desc");
+  const [genre, setGenre] = useState("");
+
   const limit = 10;
 
-  const { data, error, isLoading } = useGetBooksQuery({ page, limit });
+  const { data, error, isLoading } = useGetBooksQuery({
+    page,
+    limit,
+    sort,
+    sortBy: "createdAt",
+    filter: genre,
+  });
   //   console.log(data);
   const books = data?.data || [];
   const totalPages = data?.meta?.totalPages || 1;
@@ -29,8 +45,46 @@ const Books = () => {
 
       <div className="flex justify-between items-center my-6">
         <h1 className="font-medium">All Books</h1>
-        <Link to="/create-book">
-          <Button className="bg-blue-400 hover:bg-blue-500">Add Books</Button>
+      </div>
+
+      <div className="flex justify-start gap-4 items-center mb-6">
+        {/* Sort by */}
+        <Select onValueChange={(value) => setSort(value)} defaultValue="desc">
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sort by date" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="desc">Newest First</SelectItem>
+            <SelectItem value="asc">Oldest First</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Filter by Genre */}
+        <Select
+          onValueChange={(value) => {
+            if (value === "ALL") {
+              setGenre(""); //clears filter
+            } else {
+              setGenre(value);
+            }
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by genre" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All</SelectItem>
+            <SelectItem value="FICTION">Fiction</SelectItem>
+            <SelectItem value="NON_FICTION">Non-Fiction</SelectItem>
+            <SelectItem value="SCIENCE">Science</SelectItem>
+            <SelectItem value="HISTORY">History</SelectItem>
+            <SelectItem value="BIOGRAPHY">Biography</SelectItem>
+            <SelectItem value="FANTASY">Fantasy</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Link to="/create-book" className="ml-auto">
+          <Button className="bg-blue-400 hover:bg-blue-500 ">Add Books</Button>
         </Link>
       </div>
 
@@ -41,6 +95,7 @@ const Books = () => {
         !isLoading && <p>No books found.</p>
       )}
 
+      {/* pagination */}
       <div className="flex justify-center gap-2 mt-6 text-sm items-center">
         <Button
           disabled={page === 1}

@@ -49,8 +49,6 @@ const AddBook = () => {
     } catch (error) {
       console.error("error creating book", error);
     }
-
-    // createBook(bookData);
   };
 
   return (
