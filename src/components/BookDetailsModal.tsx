@@ -7,18 +7,9 @@ import {
   //   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useGetBookQuery } from "@/redux/api/baseApi";
+import type { BookModalProps } from "@/types";
 
-interface BookDetailsModalProps {
-  bookId: string;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-const BookDetailsModal = ({
-  bookId,
-  open,
-  onOpenChange,
-}: BookDetailsModalProps) => {
+const BookDetailsModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
   const { data, isLoading, error } = useGetBookQuery(bookId, {
     skip: !bookId,
   });

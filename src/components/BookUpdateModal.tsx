@@ -27,18 +27,9 @@ import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
 import { useGetBookQuery, useUpdateBookMutation } from "@/redux/api/baseApi";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import type { BookModalProps } from "@/types";
 
-interface BookDetailsModalProps {
-  bookId: string;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-const BookUpdateModal = ({
-  bookId,
-  open,
-  onOpenChange,
-}: BookDetailsModalProps) => {
+const BookUpdateModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
   //   console.log(bookId);
 
   const { data, isLoading, error } = useGetBookQuery(bookId, {
@@ -161,7 +152,7 @@ const BookUpdateModal = ({
                         <FormLabel>💠 Genre</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">

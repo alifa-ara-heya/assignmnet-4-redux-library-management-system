@@ -7,18 +7,41 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { IBook } from "@/types";
-import { Delete, Edit, CheckCircle, XCircle, BookUser } from "lucide-react";
+import {
+  Delete,
+  Edit,
+  CheckCircle,
+  XCircle,
+  BookUser,
+  ListCheck,
+} from "lucide-react";
 import { useState } from "react";
 import BookDetailsModal from "./BookDetailsModal";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import BookUpdateModal from "./BookUpdateModal";
-import { useDeletePostMutation } from "@/redux/api/baseApi";
+import { useDeleteBookMutation } from "@/redux/api/baseApi";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import toast from "react-hot-toast";
+import BorrowBookModal from "./BorrowBookModal";
+import { cn } from "@/lib/utils";
 
 const BookTable = ({ books }: { books: IBook[] }) => {
   const [selectedBookId, setSelectedBookId] = useState("");
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const [deletePost] = useDeletePostMutation();
+  const [borrowOpen, setBorrowOpen] = useState(false);
+  const [deleteBook] = useDeleteBookMutation();
 
   return (
     <>
@@ -72,18 +95,44 @@ const BookTable = ({ books }: { books: IBook[] }) => {
                     </TooltipContent>
                   </Tooltip>
 
-                  {/* Delete with tooltip */}
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Delete
-                        className="text-pink-600 hover:scale-90 transition w-5 h-5 cursor-pointer"
-                        onClick={() => deletePost(book._id)}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Delete Book</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  {/* Delete a book */}
+                  <AlertDialog>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <AlertDialogTrigger asChild>
+                          <Delete className="text-pink-600 hover:scale-90 transition w-5 h-5 cursor-pointer" />
+                        </AlertDialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>Delete Book</TooltipContent>
+                    </Tooltip>
+
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your book from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={async () => {
+                            try {
+                              await deleteBook(book._id).unwrap();
+                              toast.success("Book deleted successfully!");
+                            } catch (err) {
+                              toast.error("Failed to delete the book.");
+                            }
+                          }}
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
 
                   {/* View/Details with tooltip */}
                   <Tooltip>
@@ -98,6 +147,29 @@ const BookTable = ({ books }: { books: IBook[] }) => {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Book Description</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* borrow book */}
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <ListCheck
+                        className={cn(
+                          "transition w-5 h-4",
+                          book.copies > 0
+                            ? "text-yellow-500 hover:scale-90 cursor-pointer"
+                            : "text-gray-400 cursor-not-allowed"
+                        )}
+                        onClick={() => {
+                          if (book.copies > 0) {
+                            setSelectedBookId(book._id);
+                            setBorrowOpen(true);
+                          }
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Borrow Book</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -117,6 +189,12 @@ const BookTable = ({ books }: { books: IBook[] }) => {
         bookId={selectedBookId}
         open={updateOpen}
         onOpenChange={setUpdateOpen}
+      />
+
+      <BorrowBookModal
+        bookId={selectedBookId}
+        open={borrowOpen}
+        onOpenChange={setBorrowOpen}
       />
     </>
   );

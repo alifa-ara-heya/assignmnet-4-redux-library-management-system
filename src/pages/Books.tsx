@@ -55,7 +55,7 @@ const Books = () => {
         <h1 className="font-medium">All Books</h1>
       </div>
 
-      <div className="flex justify-start gap-4 items-center mb-6">
+      <div className="flex flex-wrap md:justify-start gap-4 items-center mb-6">
         {/* Sort by */}
         <Select onValueChange={(value) => setSort(value)} defaultValue="desc">
           <SelectTrigger className="w-[180px]">
