@@ -30,21 +30,21 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import Loader from "./Loader";
 import { useNavigate } from "react-router";
 
+type TBorrowForm = Omit<IBorrow, "book">;
+
 const BorrowBookModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
-  const navigate = useNavigate();
-  const { data, isLoading, error } = useGetBookQuery(bookId, {
+  const { data, isLoading } = useGetBookQuery(bookId, {
     skip: !bookId,
-    pollingInterval: 30000,
-    refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true,
   });
 
   const book = data?.data;
+  const navigate = useNavigate();
 
-  const form = useForm<Omit<IBorrow, "book">>({
+  const form = useForm<TBorrowForm>({
     defaultValues: {
       quantity: 1,
       dueDate: undefined,
@@ -53,7 +53,7 @@ const BorrowBookModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
 
   const [borrowBook, { isLoading: isBorrowing }] = useBorrowBookMutation();
 
-  const onSubmit: SubmitHandler<Omit<IBorrow, "book">> = async (data) => {
+  const onSubmit: SubmitHandler<TBorrowForm> = async (data) => {
     if (!bookId) return;
     const borrowData: IBorrow = {
       ...data,
@@ -80,21 +80,25 @@ const BorrowBookModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {book && (
-        <DialogContent className="sm:max-w-[425px] overflow-y-auto max-h-[90vh]">
-          <DialogHeader>
-            <DialogTitle>Borrow Book</DialogTitle>
-            <DialogDescription>
-              Choose how many copies you want and set a due date.
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent className="sm:max-w-[425px] overflow-y-auto max-h-[90vh]">
+        <DialogHeader>
+          <DialogTitle>Borrow Book</DialogTitle>
+          <DialogDescription>
+            Choose how many copies you want and set a due date.
+          </DialogDescription>
+        </DialogHeader>
 
+        {isLoading || !book ? (
+          <div className="flex justify-center items-center h-[100vh]">
+            <Loader />
+          </div>
+        ) : (
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6 p-3"
             >
-              {/* Displayed book info (not in form state) */}
+              {/* Book Info */}
               <div className="text-sm text-muted-foreground space-y-3">
                 <p>
                   <span className="font-medium text-foreground">📖 Title:</span>{" "}
@@ -114,7 +118,7 @@ const BorrowBookModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
                 </p>
               </div>
 
-              {/* Quantity input */}
+              {/* Quantity */}
               <FormField
                 control={form.control}
                 name="quantity"
@@ -138,14 +142,14 @@ const BorrowBookModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
                 )}
               />
 
-              {/* Due date input */}
+              {/* Due Date */}
               <FormField
                 control={form.control}
                 name="dueDate"
                 rules={{ required: "Due date is required" }}
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Due Date</FormLabel>
+                    <FormLabel>📅 Due Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -194,8 +198,8 @@ const BorrowBookModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
               </DialogFooter>
             </form>
           </Form>
-        </DialogContent>
-      )}
+        )}
+      </DialogContent>
     </Dialog>
   );
 };

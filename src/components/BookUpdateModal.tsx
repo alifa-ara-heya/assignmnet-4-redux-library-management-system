@@ -28,6 +28,7 @@ import { useGetBookQuery, useUpdateBookMutation } from "@/redux/api/baseApi";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import type { BookModalProps } from "@/types";
+import Loader from "./Loader";
 
 const BookUpdateModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
   //   console.log(bookId);
@@ -74,6 +75,13 @@ const BookUpdateModal = ({ bookId, open, onOpenChange }: BookModalProps) => {
   }, [book]);
 
   const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
+  if (isUpdating) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Loader />
+      </div>
+    );
+  }
 
   //   form.reset() is the correct way to update values after the form has been initialized.
 

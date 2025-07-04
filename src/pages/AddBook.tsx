@@ -14,17 +14,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import AddBookImg from "@/assets/add-book.jpg";
 import { useCreateBookMutation } from "@/redux/api/baseApi";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+import type { IBook } from "@/types";
 
 const AddBook = () => {
-  const form = useForm({
+  type TBookForm = Omit<IBook, "_id" | "createdAt" | "updatedAt">;
+  const navigate = useNavigate();
+
+  const form = useForm<TBookForm>({
     defaultValues: {
       title: "",
       author: "",
-      genre: "",
+      genre: "FICTION", // set a default valid option
       isbn: "",
       description: "",
       copies: 1,
@@ -34,20 +39,20 @@ const AddBook = () => {
 
   const [createBook] = useCreateBookMutation();
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
-    // form.reset();
+  const onSubmit: SubmitHandler<TBookForm> = async (data) => {
     const bookData = {
       ...data,
+      available: Number(data.copies) > 0,
     };
 
     try {
-      const res = await createBook(bookData).unwrap();
-      console.log("Book created", res);
+      await createBook(bookData).unwrap();
       form.reset();
       toast.success("Successfully Added The Book");
+      navigate("/");
     } catch (error) {
-      console.error("error creating book", error);
+      console.error("Error creating book", error);
+      toast.error("Something went wrong");
     }
   };
 

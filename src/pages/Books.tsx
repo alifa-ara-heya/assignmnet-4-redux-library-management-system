@@ -5,6 +5,7 @@ import BannerImg from "@/assets/banner.jpg";
 import { Link } from "react-router";
 import { useState } from "react";
 import { MoveLeft, MoveRight } from "lucide-react";
+import Loader from "@/components/Loader";
 import {
   Select,
   SelectContent,
@@ -41,7 +42,11 @@ const Books = () => {
   //   console.log("Books", books);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Loader />
+      </div>
+    );
   }
 
   return (

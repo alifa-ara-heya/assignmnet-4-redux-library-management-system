@@ -1,69 +1,113 @@
-# React + TypeScript + Vite
+# 📚 Library Management System – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** of a minimal Library Management System built with:
 
-Currently, two official plugins are available:
+- ⚛️ React + TypeScript
+- 🔁 Redux Toolkit + RTK Query
+- 🎨 Tailwind CSS
+- 🧩 ShadCN UI components
+- 💬 Toast Notifications
+- 💡 Optimistic UI Support (coming soon!)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+It allows users to:
 
-## Expanding the ESLint configuration
+- View books
+- Create, edit, and delete books
+- Borrow books with quantity and due date
+- View a borrow summary with total quantities
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+> ✅ **No authentication required** – it's a publicly accessible app.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🌐 Live Preview
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+👉 [Live Frontend Site](https://redux-library-management-system-by.vercel.app/)
+
+---
+
+## 🚀 Backend Repo
+
+🔗 [Backend GitHub Repository](https://github.com/your-username/library-backend)
+
+[Backend Link](https://library-management-api-eta.vercel.app)
+
+## 🧠 Features
+
+### 📚 Book Management
+
+- Add a new book
+- Edit or delete existing books
+- Sort by date (newest/oldest)
+- Filter by genre
+- Responsive UI with loading states and error messages
+
+### 📝 Borrow a Book
+
+- Select quantity and due date
+- Quantity validation (cannot exceed available copies)
+- Book marked unavailable if no copies left
+- Redirects to borrow summary page after success
+
+### 📊 Borrow Summary
+
+- Aggregates borrow data via API
+- Displays book title, ISBN, and total quantity borrowed
+
+---
+
+## 📦 Tech Stack
+
+| Layer   | Tools                                      |
+| ------- | ------------------------------------------ |
+| UI      | React, TypeScript, Tailwind CSS, ShadCN UI |
+| State   | Redux Toolkit, RTK Query                   |
+| Forms   | React Hook Form                            |
+| UX      | react-hot-toast                            |
+| Routing | React Router V7                            |
+| Build   | Vite                                       |
+
+---
+
+## 🛠 Installation
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/your-username/library-frontend.git
+cd library-frontend
+
+# 2. Install dependencies
+npm install
+
+# 3. Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+> ⚠️ Make sure your backend server is running at `http://localhost:5000`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🧩 Folder Structure
+
+```bash
+src/
+├── components/        # Reusable UI components
+├── pages/             # Main route pages (Books, AddBook, BorrowSummary)
+├── redux/             # RTK setup & API slices
+├── routes/            # React Router setup
+├── types/             # Shared TypeScript types
+└── lib/               # Utility functions (e.g., classNames)
 ```
+
+---
+
+## 🔮 Future Enhancements
+
+- 🧠 **Optimistic UI** for borrowing and editing books
+- 🔍 **Search bar** to filter books by title or author
+- 📅 **Due Date Tracker** to highlight overdue books
+- 👥 **Authentication** for admin-only access and book management
+- 📝 **Borrow history logs** with timestamps
+- 📱 **Mobile-optimized layout improvements**
+- 📊 **Dashboard view** for quick insights (e.g., most borrowed books)
+- **improving the validation system** - e.g. when creating a book with duplicate ISBN number, the form should give the user a message saying 'ISBN number cannot be duplicated.'
