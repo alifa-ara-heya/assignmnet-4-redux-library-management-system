@@ -108,6 +108,8 @@ src/
 - 📅 **Due Date Tracker** to highlight overdue books
 - 👥 **Authentication** for admin-only access and book management
 - 📝 **Borrow history logs** with timestamps
-- 📱 **Mobile-optimized layout improvements**
 - 📊 **Dashboard view** for quick insights (e.g., most borrowed books)
-- **improving the validation system** - e.g. when creating a book with duplicate ISBN number, the form should give the user a message saying 'ISBN number cannot be duplicated.'
+- **Improving the validation system** - e.g. when creating a book with duplicate ISBN number, the form should give the user a message saying 'ISBN number cannot be duplicated.
+- **Edit book button**- Instead of just using an icon, type the action button names.
+- **404 page**- (make a 404 page)
+- **Available button background change**- design available cell with green font, but light green background color.
